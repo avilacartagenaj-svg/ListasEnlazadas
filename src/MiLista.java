@@ -159,33 +159,100 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean set(ListNode node, Object object) {
+        if (node == null || object == null) return false;
+
+        ListNode actual = cabeza;
+
+        while (actual != null) {
+            if (actual == node) {
+                actual.dato = object;
+                return true;
+            }
+            actual = actual.siguiente;
+        }
         return false;
     }
 
     @Override
     public boolean remove(ListNode node) {
+        if (node == null || cabeza == null) return false;
+
+        // Caso especial: el nodo a eliminar es la cabeza
+        if (cabeza == node) {
+            cabeza = cabeza.siguiente;
+            return true;
+        }
+
+        ListNode anterior = cabeza;
+        while (anterior.siguiente != null) {
+            if (anterior.siguiente == node) {
+                anterior.siguiente = node.siguiente;
+                return true;
+            }
+            anterior = anterior.siguiente;
+        }
         return false;
     }
 
     @Override
     public boolean contains(Object object) {
-        return false;
+        return search(object) != null;
     }
 
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] arreglo = new Object[getSize()];
+        ListNode actual = cabeza;
+        int i = 0;
+
+        while (actual != null) {
+            arreglo[i] = actual.dato;
+            i++;
+            actual = actual.siguiente;
+        }
+        return arreglo;
     }
 
     @Override
     public Object[] toArray(Object[] object) {
-        return new Object[0];
+        int size = getSize();
+
+        // Si el arreglo recibido no tiene espacio suficiente, se crea uno nuevo
+        if (object.length < size) {
+            object = new Object[size];
+        }
+
+        ListNode actual = cabeza;
+        int i = 0;
+
+        while (actual != null) {
+            object[i] = actual.dato;
+            i++;
+            actual = actual.siguiente;
+        }
+
+        if (object.length > size) {
+            object[size] = null;
+        }
+
+        return object;
     }
 
 
     @Override
     public Object getBeforeTo(ListNode node) {
+        if (node == null || cabeza == null || cabeza == node) {
+            return null; // no hay "anterior" si es la cabeza o no existe
+        }
+
+        ListNode actual = cabeza;
+        while (actual.siguiente != null) {
+            if (actual.siguiente == node) {
+                return actual.dato;
+            }
+            actual = actual.siguiente;
+        }
         return null;
     }
 
