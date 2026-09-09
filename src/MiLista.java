@@ -259,23 +259,73 @@ public class MiLista implements ListInterface{
 
     @Override
     public Object getNextTo(ListNode node) {
-        return null;
+        if (node == null || node.siguiente == null) {
+            return null;
+        }
+        return node.siguiente.dato;
     }
 
     @Override
     public MiLista subList(ListNode from, ListNode to) {
-        return null;
+        if (from == null || to == null) return null;
+
+        MiLista sub = new MiLista();
+        ListNode actual = from;
+        boolean encontrado = false;
+
+        while (actual != null) {
+            sub.insertTail(actual.dato);
+            if (actual == to) {
+                encontrado = true;
+                break;
+            }
+            actual = actual.siguiente;
+        }
+
+        return encontrado ? sub : null;
     }
 
     @Override
     public MiLista sortList() {
-        return null;
+        MiLista ordenada = new MiLista();
+        Object[] arreglo = this.toArray();
+
+        for (int i = 0; i < arreglo.length - 1; i++) {
+            for (int j = 0; j < arreglo.length - 1 - i; j++) {
+                Comparable actual = (Comparable) arreglo[j];
+                if (actual.compareTo(arreglo[j + 1]) > 0) {
+                    Object temp = arreglo[j];
+                    arreglo[j] = arreglo[j + 1];
+                    arreglo[j + 1] = temp;
+                }
+            }
+        }
+
+        for (Object dato : arreglo) {
+            ordenada.insertTail(dato);
+        }
+
+        return ordenada;
     }
 
     @Override
     public String toString() {
-        return "MiLista{" +
-                "cabeza=" + cabeza +
-                '}';
+        if (cabeza == null) {
+            return "[]";
+        }
+
+        String resultado = "[";
+        ListNode actual = cabeza;
+
+        while (actual != null) {
+            resultado = resultado + actual.dato;
+            if (actual.siguiente != null) {
+                resultado = resultado + ", ";
+            }
+            actual = actual.siguiente;
+        }
+        resultado = resultado + "]";
+
+        return resultado;
     }
 }
