@@ -19,12 +19,12 @@ public class Main {
 
         System.out.println(miLista.getHead());
         System.out.println(miLista.getTail());
+        System.out.println(miLista.search(true));
 
         miLista.clear();
 
         System.out.println(miLista.toString());
         System.out.println(miLista.getSize());
-
 
     }
 }

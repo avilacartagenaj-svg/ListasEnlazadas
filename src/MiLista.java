@@ -25,11 +25,14 @@ public class MiLista implements ListInterface{
 
     @Override
     public void clear() {
-        this.cabeza = null;
+        cabeza = null;
     }
 
     @Override
     public Object getHead() {
+        if (cabeza == null){
+            return null;
+        }
         return this.cabeza.dato;
     }
 
@@ -49,28 +52,76 @@ public class MiLista implements ListInterface{
 
     @Override
     public Object get(ListNode node) {
-        return null;
+        if (node == null) {
+            return null;
+        }
+        return node.dato;
     }
 
     @Override
     public Object search(Object object) {
+        if (object == null) {
+            return null;
+        }
+
+        ListNode iterador = cabeza;
+
+        while (iterador != null) {
+            if (iterador.dato.equals(object)) {
+                return iterador;
+            }
+            iterador = iterador.siguiente;
+        }
         return null;
     }
 
     @Override
     public boolean add(Object object) {
-        return false;
+        if (object == null) return false;
+
+        ListNode nuevo = new ListNode(object);
+
+        if (cabeza == null) {
+            cabeza = nuevo;
+            return true;
+        }
+
+        ListNode actual = cabeza;
+        while (actual.siguiente != null) {
+            actual = actual.siguiente;
+        }
+        actual.siguiente = nuevo;
+        return true;
     }
 
     @Override
     public boolean insert(ListNode node, Object object) {
+        if (node == null || object == null) return false;
+
+        ListNode actual = cabeza;
+
+        while (actual != null) {
+            if (actual == node) {
+                ListNode nuevo = new ListNode(object);
+                nuevo.siguiente = actual.siguiente;
+                actual.siguiente = nuevo;
+                return true;
+            }
+            actual = actual.siguiente;
+        }
         return false;
     }
 
     @Override
     public boolean insert(Object ob, Object object) {
-        return false;
+        ListNode nodoReferencia = (ListNode) search(ob);
+
+        if (nodoReferencia == null) {
+            return false;
+        }
+        return insert(nodoReferencia, object);
     }
+
 
     @Override
     public boolean insertHead(Object object) {
@@ -92,15 +143,18 @@ public class MiLista implements ListInterface{
     @Override
     public boolean insertTail(Object object) {
         ListNode nuevaCola = new ListNode(object);
-        ListNode i = this.cabeza;
+        if (cabeza == null) {
+            cabeza = nuevaCola;
+            return true;
+        }
 
+        ListNode i = this.cabeza;
         while (i.siguiente != null) {
             i = i.siguiente;
         }
-
         i.siguiente = nuevaCola;
 
-        return false;
+        return true;
     }
 
     @Override
@@ -134,7 +188,7 @@ public class MiLista implements ListInterface{
     public Object getBeforeTo(ListNode node) {
         return null;
     }
-    
+
 
     @Override
     public Object getNextTo(ListNode node) {
